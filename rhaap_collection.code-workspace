@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "collections/ansible_collections/ansible_ssa/general/roles/instance"
+		}
+	],
+	"settings": {}
+}

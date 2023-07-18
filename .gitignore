@@ -1,0 +1,4 @@
+env.sh
+ansible-navigator.log
+*-artifact-*.json
+collections/ansible_collections

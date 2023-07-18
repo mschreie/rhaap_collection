@@ -1,0 +1,51 @@
+---
+- name: Create an instance
+  gather_facts: false
+  hosts:
+    - localhost
+
+  vars:
+    my_instance_name: my-vm
+    # Parameters on how to set up this instance e.g vm parameters)
+    my_instance_parameters:
+      vmware_network_type: 'static'
+      vmware_ip_address: '10.6.55.2'
+      vmware_netmask: '255.255.255.0'
+      vmware_gateway: '10.6.55.1'
+      # vmware_dns_server1: '10.11.2.44'
+      vmware_dns_server1: '10.11.0.13'
+      # vmware_dns_server2:
+      vmware_network: "DPortGroup_NW1055_HIT_rh_bcl_core"
+      # defaults to thin
+      # vmware_instance_disktype: 'thick'
+      vmware_instance_diskgb: '16'
+      vmware_instance_memmb: '8192'
+      vmware_instance_cpus: '2'
+    type: vmware
+    controller_enable_provider_vmware: true
+
+    ### NOT NEEDED as they are in the ENV-vars! ??
+    # user provided credentials to log into VMware
+    # vmware_host: "{{ vault_vmware_host }}"
+    # vmware_username: "{{ vault_vmware_username }}"
+    # vmware_password: "{{ vault_vmware_password }}"
+    vcenter_validate_certs: false
+    # the cluster, datacenter, etc. in which the VMs will be created
+    # MANDATORY
+    vmware_template: "RHEL 8 Template WIP"
+    vmware_datacenter: "HIT_RedHat"
+    vmware_datastore: "VV.HIT-RedHat"
+    vmware_folder: "HIT_RedHat/vm/BCL"
+    vmware_cluster: "HIT_RedHat"
+    vmware_domain_name: "bcl.redhat.hpecic.com"
+    vmware_ansible_user: "root"
+
+  tasks:
+    - name: Deploy Red Hat Ansible Automation Platform automation controller without private automation hub
+      ansible.builtin.include_role:
+        name: ansible_ssa.general.instance
+      vars:
+        instance_name: "{{ my_instance_name }}"
+        instance_group: "my_group"
+        instance_parameters: "{{ my_instance_parameters | default({}) }}"
+        instance_wait_for_connection: true
